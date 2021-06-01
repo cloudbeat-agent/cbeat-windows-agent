@@ -23,7 +23,7 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir=C:\Users\artur\Desktop\CloudbeatAgent
-OutputBaseFilename=cloudbeat_agent
+OutputBaseFilename=cbeat-agent-latest
 SetupIconFile=C:\Users\artur\Desktop\CloudbeatAgent\assets\cloudbeat.ico
 Compression=lzma
 SolidCompression=yes
@@ -39,22 +39,23 @@ Source: "C:\Users\artur\Desktop\CloudbeatAgent\assets\files\*"; DestDir: "{app}"
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{group}\{cm:ReconfigureAgent}"; Filename: "{app}\configure.cmd"
+Name: "{group}\{cm:ReconfigureAgent}"; Filename: "{app}\configure.cmd"; IconFilename: "{app}\cloudbeat.ico"
 
 [CustomMessages]
 english.ServerInfo=Server information
 english.FillServerInfo=Please fill the fields below to configure your Cloudbeat Agent.
 english.ServerKey=Server key
-english.CloudbeatUrl=Cloudbeat URL (Ex.: https://mine.cloudbeat.me)
+english.CloudbeatUrl=Gateway address
 english.ReconfigureAgent=Reconfigure Cloudbeat Agent
 brazilianportuguese.ServerInfo=Informações do servidor
 brazilianportuguese.FillServerInfo=Por favor, preencha os campos abaixo par configurar o Agente do Cloudbeat.
 brazilianportuguese.ServerKey=Chave do servidor
-brazilianportuguese.CloudbeatUrl=URL do Cloudbeat (Ex.: https://meu.cloudbeat.me)
+brazilianportuguese.CloudbeatUrl=Endereço do gateway
 brazilianportuguese.ReconfigureAgent=Reconfigurar Agente do Cloudbeat
 
 [UninstallRun]
-Filename: "{app}\remove.cmd"; Flags: runhidden; RunOnceId: "DelService"
+Filename: "{app}\remove.cmd"; Flags: runascurrentuser; RunOnceId: "DelService"
+//Filename: "{app}\remove_hidden.cmd"; Flags: runhidden; RunOnceId: "DelService"
 
 [Code]
 var
@@ -99,6 +100,6 @@ begin
     Exec(
       ExpandConstant('{app}') + '\nodejs\node.exe ', '"' + ExpandConstant('{app}') + '\service.js" --add ' + Page.Values[0] + ' ' + Page.Values[1],
       '', SW_HIDE, ewWaitUntilTerminated, Result2);
-    Exec('cmd.exe', '/c net start "Cloudbeat Agent" & pause', '', SW_HIDE, ewWaitUntilTerminated, Result0);
+    Exec('cmd.exe', '/c net start "Cloudbeat Agent"', '', SW_HIDE, ewWaitUntilTerminated, Result0);
   end;
 end;

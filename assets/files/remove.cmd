@@ -20,4 +20,4 @@ goto check_Permissions
         echo Right click on this file and select "Run as administrator".
     )
 
-    pause >nul
+    ping 127.0.0.1 -n 3 > nul
